@@ -172,6 +172,7 @@ export default function ArticuloClient() {
             </button>
             <br />
             <hr />
+
             <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <table className="table table-bordered table-striped table-hover">
                     <thead>
@@ -186,7 +187,7 @@ export default function ArticuloClient() {
                     <tbody>
                         {articulos.map((articulo: Articulo) => (
                             <tr key={articulo.id}>
-                                <td>{articulo.id}</td>
+                                <td style={{ textAlign: "center" }}>{articulo.id}</td>
                                 <td>{articulo.titulo}</td>
                                 <td>{articulo.cuerpo}</td>
                                 <td>{articulo.autor}</td>
