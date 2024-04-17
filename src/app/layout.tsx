@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export const metadata: Metadata = {
   title: "Creado con Next 14 y typescript",
-  description: "CRUD front end",
+  description: "CRUD Frontend typescript",
 };
 
 export default function RootLayout({
