@@ -2,6 +2,7 @@
 // ArticuloClient.tsx
 import React, { useState, useEffect } from 'react';
 import ArticuloServer from './ArticuloServer';
+import ReactPaginate from 'react-paginate';
 import { Table, Button, Modal, Form } from 'react-bootstrap';
 
 interface Articulo {
@@ -44,6 +45,36 @@ export default function ArticuloClient() {
         setCuerpo('');
         setAutor('');
     };
+
+    // Paginacion
+    const [pageNumber, setPageNumber] = useState(0);
+    const articlesPerPage = 5;
+    const pagesVisited = pageNumber * articlesPerPage;
+
+    const displayArticles = articulos
+        .slice(pagesVisited, pagesVisited + articlesPerPage)
+        .map((articulo) => (
+            <tr key={articulo.id}>
+                <td>{articulo.id}</td>
+                <td>{articulo.titulo}</td>
+                <td>{articulo.cuerpo}</td>
+                <td>{articulo.autor}</td>
+                <td>
+                    <Button variant="primary" onClick={() => startEdit(articulo)} data-bs-toggle="modal" data-bs-target="#crearyactModal">
+                        Editar
+                    </Button>
+                    {" "}
+                    <Button variant="danger" onClick={() => handleDelete(articulo.id)}>
+                        Eliminar
+                    </Button>
+                </td>
+            </tr>
+        ));
+
+    const pageCount = Math.ceil(articulos.length / articlesPerPage);
+    const changePage = ({ selected }: { selected: number }) => {
+        setPageNumber(selected);
+    };// Fin Paginacion
 
     async function fetchData() {
         try {
@@ -189,28 +220,26 @@ export default function ArticuloClient() {
                         </tr>
                     </thead>
                     <tbody style={{ textAlign: "center" }}>
-
-                        {articulos.map((articulo: Articulo) => (
-                            <tr key={articulo.id}>
-                                <td>{articulo.id}</td>
-                                <td>{articulo.titulo}</td>
-                                <td>{articulo.cuerpo}</td>
-                                <td>{articulo.autor}</td>
-                                <td>
-                                    <Button variant="primary" onClick={() => startEdit(articulo)} data-bs-toggle="modal" data-bs-target="#crearyactModal">
-                                        Editar
-                                    </Button>
-                                    {" "}
-                                    <Button variant="danger" onClick={() => handleDelete(articulo.id)}>
-                                        Eliminar
-                                    </Button>
-                                </td>
-                            </tr>
-                        ))}
-
+                        {displayArticles}
                     </tbody>
                 </Table>
             </div>
+            <ReactPaginate
+                previousLabel={"Anterior"}
+                nextLabel={"Siguiente"}
+                pageCount={pageCount}
+                onPageChange={changePage}
+                containerClassName={"pagination justify-content-center"}
+                pageClassName={"page-item"}
+                pageLinkClassName={"page-link"}
+                previousClassName={"page-item"}
+                previousLinkClassName={"page-link"}
+                nextClassName={"page-item"}
+                nextLinkClassName={"page-link"}
+                activeClassName={"active"}
+                breakClassName={"page-item"}
+                breakLinkClassName={"page-link"}
+            />
         </section>
     );
 }
