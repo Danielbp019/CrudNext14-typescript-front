@@ -12,7 +12,7 @@ interface Articulo {
     autor: string;
 }
 
-//Cuando haces una llamada a la API para crear o actualizar un artículo, parece que la respuesta de la API incluye un objeto con las propiedades success y articulo.
+//Cuando haces una llamada a la API para crear o actualizar un artículo, la API incluye un objeto con las propiedades success y articulo.
 interface ApiResponse {
     success: boolean;
     articulo: Articulo;
@@ -28,9 +28,12 @@ export default function ArticuloClient() {
 
     //Modal
     const [show, setShow] = useState(false);
+
     //Cerrar modal y limpiar campos
     const handleClose = () => {
         setShow(false);
+        setIsEditing(false);
+        setEditingId(null);
         limpiarCampos();
     };
 
@@ -74,7 +77,8 @@ export default function ArticuloClient() {
     const pageCount = Math.ceil(articulos.length / articlesPerPage);
     const changePage = ({ selected }: { selected: number }) => {
         setPageNumber(selected);
-    };// Fin Paginacion
+    };
+    // Fin Paginacion
 
     async function fetchData() {
         try {
@@ -116,8 +120,6 @@ export default function ArticuloClient() {
                     setArticulos(articulos.map(art => art.id === editingId ? response.articulo : art));
                     // Restablecer el formulario y salir del modo de edición
                     handleClose();
-                    setIsEditing(false);
-                    setEditingId(null);
                 }
 
             } catch (error) {
